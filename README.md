@@ -103,7 +103,7 @@ Create a bash alias to manage this symlink. Add the following to your `~/.bashrc
 
 ```bash
 # Point the Gemini MCP to the current directory
-alias focus-agent='ln -sfn $(pwd) /home/hitchgernn/projects/my-gemini-agents/active-workspace && echo "Agent workspace set to: $(pwd)"'
+alias focus-agent='ln -sfn $(pwd) /home/to/your/path/airgapped-mcp-agents-for-geminicli/active-workspace && echo "Agent workspace set to: $(pwd)"'
 ```
 
 **Note:** Update the absolute path to match the location where you cloned the repository.
@@ -120,11 +120,11 @@ Update your Gemini CLI configuration file (e.g., `gemini_config.json`) to regist
 {
   "mcpServers": {
     "playwright-secure": {
-      "command": "/home/hitchgernn/projects/my-gemini-agents/playwright-mcp/start-secure.sh"
+      "command": "/home/to/your/path/airgapped-mcp-agents-for-geminicli/playwright-mcp/start-secure.sh"
     },
     "filesystem-secure": {
-      "command": "/home/hitchgernn/projects/my-gemini-agents/filesystem-mcp/start-secure.sh",
-      "args": ["/home/hitchgernn/projects/my-gemini-agents/active-workspace"]
+      "command": "/add/to/your/path/airgapped-mcp-agents-for-geminicli/filesystem-mcp/start-secure.sh",
+      "args": ["/add/to/your/path/airgapped-mcp-agents-for-geminicli/active-workspace"]
     }
   }
 }

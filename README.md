@@ -6,6 +6,41 @@ This repository provides a highly secure, dual-sandbox AI agent architecture imp
 The primary objective of this project is to separate external network access from local filesystem access. By utilizing Linux Bubblewrap (`bwrap`), the system provisions two distinct unprivileged namespaces, ensuring that the web-scraping agent cannot access the host filesystem and the filesystem-management agent cannot communicate with external networks.
 
 ## Architecture
+```mermaid
+graph TD
+    %% Define Styles
+    classDef orchestrator fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#fff;
+    classDef secureBox fill:#1a202c,stroke:#e2e8f0,stroke-width:2px,stroke-dasharray: 5 5,color:#fff;
+    classDef mcp fill:#2b6cb0,stroke:#63b3ed,stroke-width:2px,color:#fff;
+    classDef danger fill:#9b2c2c,stroke:#fc8181,stroke-width:2px,color:#fff;
+    classDef target fill:#276749,stroke:#68d391,stroke-width:2px,color:#fff;
+
+    %% Nodes
+    CLI["Gemini CLI (Orchestrator)"]:::orchestrator
+
+    subgraph "Bubblewrap Cage 1: Web Scraper"
+        P_MCP["Playwright MCP Server"]:::mcp
+    end
+
+    subgraph "Bubblewrap Cage 2: Local Files"
+        F_MCP["Filesystem MCP Server"]:::mcp
+    end
+
+    WWW(("The Open Internet")):::danger
+    WORKSPACE[/"active-workspace (Symlink)"/]:::target
+    HOST_OS[("Host Linux OS")]:::orchestrator
+
+    %% Connections
+    CLI <-->|stdio (JSON RPC)| P_MCP
+    CLI <-->|stdio (JSON RPC)| F_MCP
+
+    P_MCP <-->|Unrestricted Access| WWW
+    P_MCP -.->|Read-Only Mount| HOST_OS
+
+    F_MCP -.-x|Network Unshared (--unshare-net)| WWW
+    F_MCP <-->|Read/Write Mount| WORKSPACE
+    F_MCP -.->|Read-Only Mount| HOST_OS
+```
 The system consists of two independent MCP servers communicating over `stdio`:
 
 1.  **`playwright-mcp` (The Web Scraper)**

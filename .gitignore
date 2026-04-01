@@ -1,0 +1,10 @@
+node_modules/
+
+
+*.js
+!start-secure.sh
+
+*.log
+cage-debug.txt
+
+active-workspace

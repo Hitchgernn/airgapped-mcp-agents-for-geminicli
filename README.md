@@ -31,15 +31,15 @@ graph TD
     HOST_OS[("Host Linux OS")]:::orchestrator
 
     %% Connections
-    CLI <-->|stdio (JSON RPC)| P_MCP
-    CLI <-->|stdio (JSON RPC)| F_MCP
+    CLI <-->|"stdio (JSON RPC)"| P_MCP
+    CLI <-->|"stdio (JSON RPC)"| F_MCP
 
-    P_MCP <-->|Unrestricted Access| WWW
-    P_MCP -.->|Read-Only Mount| HOST_OS
+    P_MCP <-->|"Unrestricted Access"| WWW
+    P_MCP -.->|"Read-Only Mount"| HOST_OS
 
-    F_MCP -.-x|Network Unshared (--unshare-net)| WWW
-    F_MCP <-->|Read/Write Mount| WORKSPACE
-    F_MCP -.->|Read-Only Mount| HOST_OS
+    F_MCP -.-|"Network Unshared (--unshare-net)"| WWW
+    F_MCP <-->|"Read/Write Mount"| WORKSPACE
+    F_MCP -.->|"Read-Only Mount"| HOST_OS
 ```
 The system consists of two independent MCP servers communicating over `stdio`:
 

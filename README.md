@@ -63,8 +63,8 @@ To deploy this architecture, the host system must run a Linux distribution with 
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/hitchgernn/my-gemini-agents.git
-cd my-gemini-agents
+git clone https://github.com/hitchgernn/airgapped-mcp-agents-for-geminicli.git
+cd airgapped-mcp-agents-for-geminicli
 ```
 
 ### 2. Build the Playwright Server
@@ -103,7 +103,7 @@ Create a bash alias to manage this symlink. Add the following to your `~/.bashrc
 
 ```bash
 # Point the Gemini MCP to the current directory
-alias focus-agent='ln -sfn $(pwd) /home/to/your/path/my-gemini-agents/active-workspace && ls -la /home/to/your/path/my-gemini-agents/active-workspace'
+alias focus-agent='ln -sfn $(pwd) /home/to/your/path/airgapped-mcp-agents-for-geminicli/active-workspace && ls -la /home/to/your/path/airgapped-mcp-agents-for-geminicli/active-workspace'
 ```
 
 **Note:** Update the absolute path to match the location where you cloned the repository.
@@ -166,3 +166,4 @@ If files are being written to the `filesystem-mcp` directory instead of your act
 
 *   Verify the `active-workspace` symlink is pointing to the correct absolute path (`ls -la active-workspace`).
 *   Ensure the `gemini_config.json` explicitly passes the symlink path in the `args` array.
+

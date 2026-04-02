@@ -136,6 +136,7 @@ Update your Gemini CLI configuration file (`settings.json`) to register the MCP 
 Navigate to the directory where you want the AI to read or write files, and execute the targeting alias.
 
 ```bash
+# for example
 cd ~/Documents/my-current-project
 focus-agent
 ```
@@ -147,7 +148,7 @@ Launch your Gemini CLI.
 You can now issue instructions that require both internet access and secure local file manipulation.
 
 **Example Prompt:**
-> "Use Playwright to scrape the latest release notes from the DomJudge GitHub repository. Summarize the changes and use the filesystem tool to save the summary as domjudge_updates.md in my current workspace."
+> "Use your Playwright tool to navigate to the official release notes for the latest version of PyTorch or TensorFlow. Read through the updates and summarize the top 5 most critical changes regarding performance optimization or new neural network APIs. Once you have the summary, use your Filesystem tool to write it into a well-formatted file called `framework_updates.md` in my active workspace."
 
 ## Troubleshooting
 

@@ -51,6 +51,35 @@ The system consists of two independent MCP servers communicating over `stdio`:
     *   **Function:** Lists directories, reads, writes, and deletes files within a dynamically specified target workspace.
     *   **Security Posture:** Network access is completely disabled (`--unshare-net`). Write access is restricted entirely to the active workspace folder. Application-level path validation prevents directory traversal (`../`) vulnerabilities.
 
+## The Threat Model (Why is this necessary?)
+
+If you do not use this air-gapped architecture and instead run a single MCP server with both Internet and Filesystem capabilities, you expose your host machine to severe vulnerabilities.
+
+Here is what a standard, **vulnerable** setup looks like:
+
+```mermaid
+graph TD
+    %% Define Styles
+    classDef orchestrator fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#fff;
+    classDef vulnerableBox fill:#742a2a,stroke:#fc8181,stroke-width:2px,stroke-dasharray: 5 5,color:#fff;
+    classDef mcp fill:#2b6cb0,stroke:#63b3ed,stroke-width:2px,color:#fff;
+    classDef danger fill:#9b2c2c,stroke:#fc8181,stroke-width:2px,color:#fff;
+    classDef target fill:#276749,stroke:#68d391,stroke-width:2px,color:#fff;
+
+    CLI["Gemini CLI (Orchestrator)"]:::orchestrator
+
+    subgraph "The Vulnerable Monolith (No Air-Gap)"
+        SINGLE_MCP["Single MCP Server (Web + Files)"]:::vulnerableBox
+    end
+
+    WWW(("The Open Internet")):::danger
+    HOST_OS[("Full Host OS Filesystem")]:::danger
+
+    CLI <-->|stdio| SINGLE_MCP
+    SINGLE_MCP <-->|Unrestricted Download/Exfiltration| WWW
+    SINGLE_MCP <-->|Unrestricted Read/Write| HOST_OS
+```
+
 ## Prerequisites
 To deploy this architecture, the host system must run a Linux distribution with the following dependencies installed:
 
@@ -166,5 +195,4 @@ If the Gemini CLI fails to connect to the MCP servers, the Bubblewrap cage is li
 If files are being written to the `filesystem-mcp` directory instead of your active project:
 
 *   Verify the `active-workspace` symlink is pointing to the correct absolute path (`ls -la active-workspace`).
-*   Ensure the `gemini_config.json` explicitly passes the symlink path in the `args` array.
-
+*   Ensure the `settings.json` explicitly passes the symlink path in the `args` array.

@@ -56,7 +56,7 @@ To deploy this architecture, the host system must run a Linux distribution with 
 
 *   **Node.js** (v18 or higher)
 *   **npm** or **yarn**
-*   **Bubblewrap** (`sudo dnf install bubblewrap`)
+*   **Bubblewrap** (`sudo apt install bubblewrap` for Debian/Ubuntu based or `sudo dnf install bubblewrap` for Fedora/RHEL/CentOS)
 *   **Gemini CLI** (configured to accept MCP servers)
 
 ## Installation
@@ -103,7 +103,7 @@ Create a bash alias to manage this symlink. Add the following to your `~/.bashrc
 
 ```bash
 # Point the Gemini MCP to the current directory
-alias focus-agent='ln -sfn $(pwd) /home/to/your/path/airgapped-mcp-agents-for-geminicli/active-workspace && echo "Agent workspace set to: $(pwd)"'
+alias focus-agent='ln -sfn $(pwd) /home/to/your/path/my-gemini-agents/active-workspace && ls -la /home/to/your/path/my-gemini-agents/active-workspace'
 ```
 
 **Note:** Update the absolute path to match the location where you cloned the repository.
@@ -114,7 +114,7 @@ source ~/.bashrc
 ```
 
 ### 2. Gemini CLI Integration
-Update your Gemini CLI configuration file (e.g., `gemini_config.json`) to register the MCP servers. Point the filesystem agent's arguments to the dynamic symlink created in the previous step.
+Update your Gemini CLI configuration file (`settings.json`) to register the MCP servers. Point the filesystem agent's arguments to the dynamic symlink created in the previous step.
 
 ```json
 {

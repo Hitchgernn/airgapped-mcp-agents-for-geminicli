@@ -7,7 +7,6 @@ import {
 import fs from "node:fs/promises";
 import path from "node:path";
 
-// The sandbox will mount our target directory as /workspace
 const WORKSPACE_DIR = process.cwd(); 
 
 const server = new Server(
@@ -15,8 +14,6 @@ const server = new Server(
   { capabilities: { tools: {} } }
 );
 
-// --- SECURITY MIDDLEWARE ---
-// Prevents Directory Traversal Attacks (e.g., trying to read ../../../../etc/passwd)
 function getSafePath(requestedPath: string): string {
   const resolvedPath = path.resolve(WORKSPACE_DIR, requestedPath);
   const relativePath = path.relative(WORKSPACE_DIR, resolvedPath);
@@ -43,7 +40,6 @@ function getRequiredString(args: unknown, key: string): string {
   return value;
 }
 
-// Register available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
@@ -90,7 +86,6 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
   };
 });
 
-// Handle tool execution
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
 

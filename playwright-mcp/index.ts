@@ -1,4 +1,3 @@
-// 1. MUST BE AT THE VERY TOP: Force Playwright to use local binaries
 process.env.PLAYWRIGHT_BROWSERS_PATH = '0';
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -9,7 +8,6 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { chromium, type Browser, type Page } from "playwright";
 
-// Global Playwright state
 let browser: Browser | null = null;
 let page: Page | null = null;
 
@@ -38,7 +36,6 @@ const server = new Server(
   }
 );
 
-// Register available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
@@ -57,7 +54,6 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
   };
 });
 
-// Handle tool execution
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
 
@@ -65,9 +61,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const url = getRequiredUrl(args);
 
     try {
-      // Initialize browser lazily
       if (!browser) {
-        // 2. CRITICAL SANDBOX FLAGS
         browser = await chromium.launch({ 
             headless: true,
             args: [
@@ -83,14 +77,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       await page!.goto(url, { waitUntil: "networkidle" });
 
-      // Extract DOM
       const domContent = await page!.evaluate(() => document.body.innerText);
       
-      // Capture base64 screenshot
       const screenshotBuffer = await page!.screenshot({ type: "jpeg", quality: 60 });
       const screenshotBase64 = screenshotBuffer.toString("base64");
 
-      // Return data securely to the CLI
       return {
         content: [
           {
@@ -115,7 +106,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   throw new Error(`Unknown tool: ${name}`);
 });
 
-// Graceful shutdown
 process.on("SIGINT", async () => {
   if (browser) await browser.close();
   process.exit(0);
@@ -126,7 +116,6 @@ process.on("SIGTERM", async () => {
   process.exit(0);
 });
 
-// Start the server over Stdio
 async function run() {
   const transport = new StdioServerTransport();
   await server.connect(transport);

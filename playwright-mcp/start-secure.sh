@@ -3,9 +3,6 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
-# Bubblewrap cage for the Playwright MCP.
-# Allows network access, but strictly read-only for the local filesystem.
-
 bwrap \
   --ro-bind /usr /usr \
   --symlink usr/lib /lib \
